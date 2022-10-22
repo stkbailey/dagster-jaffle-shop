@@ -16,7 +16,7 @@ def profile_duckdb_tables(context: OpExecutionContext):
         df = conn.execute(f"select * from {t}").fetchdf()
         profile = ProfileReport(df, title="Pandas Profiling Report")
         profile_metadata = json.loads(profile.to_json())
-        
+
     context.add_output_metadata(profile_metadata)
 
 

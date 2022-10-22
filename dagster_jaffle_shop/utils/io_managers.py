@@ -23,13 +23,6 @@ class DuckDBIOManager(IOManager):
         table_name = context.asset_key.to_user_string()
         rendered_query = render_jinja_template(obj)
         query = f"CREATE OR REPLACE TABLE {table_name} AS {rendered_query}"
-        context.add_output_metadata(
-            {
-                "query": rendered_query,
-                "raw_query": query,
-                "table_name": table_name,
-            }
-        )
 
         # we try multiple times to insert the data
         max_attempts = 5
@@ -37,11 +30,22 @@ class DuckDBIOManager(IOManager):
         while counter < max_attempts:
             try:
                 with duckdb.connect(self.db_file, read_only=False) as conn:
-                    conn.execute(query)
+                    result_df = conn.execute(query).fetch_df()
                 counter = max_attempts
             except duckdb.IOException:
                 counter += 1
                 time.sleep(1)
+
+        if "result_df" not in vars():
+            raise Exception("Query was unsuccessful.")
+
+        context.add_output_metadata(
+            {
+                "query": rendered_query,
+                "table_name": table_name,
+                "count_records": int(result_df.iloc[0]["Count"]),
+            }
+        )
 
     def load_input(self, context: InputContext) -> str:
         """
