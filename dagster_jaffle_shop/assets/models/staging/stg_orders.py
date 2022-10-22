@@ -3,7 +3,7 @@ from dagster import asset, OpExecutionContext
 from dagster_jaffle_shop.utils.io_managers import duckdb_io_manager
 
 
-@asset(io_manager_def=duckdb_io_manager)
+@asset(group_name="models", io_manager_def=duckdb_io_manager)
 def stg_orders(context: OpExecutionContext, raw_orders: str) -> str:
     "An intermediate staging table for orders"
 

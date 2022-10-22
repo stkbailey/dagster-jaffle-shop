@@ -3,7 +3,7 @@ from dagster import asset
 from dagster_jaffle_shop.utils.io_managers import duckdb_io_manager
 
 
-@asset(io_manager_def=duckdb_io_manager)
+@asset(group_name="models", io_manager_def=duckdb_io_manager)
 def orders(stg_orders: str, stg_payments: str) -> str:
     "This table has basic information about orders, as well as some derived facts based on payments"
 
