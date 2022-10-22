@@ -3,7 +3,8 @@ import warnings
 from dagster import repository, load_assets_from_package_module, ExperimentalWarning
 
 from dagster_jaffle_shop import assets
-from dagster_jaffle_shop.jobs import materialize_all_job
+from dagster_jaffle_shop.jobs.models import materialize_all_job
+from dagster_jaffle_shop.jobs.profiling import evaluate_duckdb_tables_job
 
 
 # Filter extraneous warnings that Dagster emits
@@ -16,4 +17,4 @@ asset_list = load_assets_from_package_module(assets)
 @repository
 def jaffle_shop_repo():
     "Repo (like a folder) for Jaffle Shop assets, jobs, sensors, schedules."
-    return asset_list + [materialize_all_job]
+    return asset_list + [materialize_all_job, evaluate_duckdb_tables_job]
