@@ -1,26 +1,54 @@
 import duckdb
-import pathlib
+import pytest
+
+DATA_CSV = """\
+id,value
+1,101
+2,202
+3,303"""
 
 
-def test_duckdb_create():
+@pytest.fixture
+def duckdb_cursor(tmp_path):
+    # create duckdb database and csv
     cursor = duckdb.connect()
-    p = (
-        pathlib.Path().cwd()
-        / "dagster_jaffle_shop"
-        / "include"
-        / "seeds"
-        / "raw_customers.csv"
-    )
+    f = tmp_path / "foo.csv"
+    f.write_text(DATA_CSV)
 
-    QUERY = f"CREATE TABLE new_tbl AS SELECT * FROM read_csv_auto('{p.as_posix()}');"
-    print(cursor.execute(QUERY).fetchall())
+    # load table
+    query = f"""
+    CREATE TABLE new_tbl AS (
+        SELECT * FROM read_csv_auto('{f.as_posix()}')
+    );"""
+    cursor.execute(query).fetchdf()
 
-    assert False
+    yield cursor
 
 
-def test_duckdb_select():
+def test_duckdb_create(tmp_path):
+    # given
     cursor = duckdb.connect()
+    f = tmp_path / "foo.csv"
+    f.write_text(DATA_CSV)
+
+    # when
+    QUERY = f"""
+    CREATE TABLE new_tbl AS (
+        SELECT * FROM read_csv_auto('{f.as_posix()}')
+    );"""
+    df = cursor.execute(QUERY).fetchdf()
+
+    # then
+    assert df.iloc[0]["Count"] == 3
+
+
+def test_duckdb_select(duckdb_cursor):
+    # given
     QUERY = "select * from new_tbl;"
-    print(cursor.execute(QUERY).fetchall())
 
-    assert False
+    # when
+    df = duckdb_cursor.execute(QUERY).fetchdf()
+
+    # then
+    print(df)
+    assert df.shape == (3, 2)

@@ -71,4 +71,4 @@ def test_jinja_interpolation():
 
     print(result)
 
-    assert False
+    assert "{" not in result
