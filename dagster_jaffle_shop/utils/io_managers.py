@@ -23,12 +23,8 @@ class DuckDBIOManager(IOManager):
         rendered_query = render_jinja_template(obj)
         with duckdb.connect(self.db_file, read_only=False) as conn:
             query = f"CREATE OR REPLACE TABLE {table_name} AS {rendered_query}"
+            context.add_output_metadata({"query": rendered_query, "table_name": table_name})
             conn.execute(query)
-
-            # log metadata based on the table
-            # context.log.info(df)
-            metadata = {"query": rendered_query} #, "records": df.shape[0]}
-            context.add_output_metadata(metadata)
 
     def load_input(self, context: InputContext) -> str:
         """
