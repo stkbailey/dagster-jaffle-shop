@@ -16,12 +16,12 @@ class DuckDBResource:
     def __init__(self, database: str):
         self.database = database
 
-    def execute_query(self, query: str) -> pandas.DataFrame:
-        with duckdb.connect(database=self.database) as conn:
+    def execute_query(self, query: str, read_only=True) -> pandas.DataFrame:
+        with duckdb.connect(database=self.database, read_only=read_only) as conn:
             logger.info("Executing query: %s", query)
             df = conn.execute(query).fetch_df()
         
-        if df.shape[0] == 0:
+        if not "df" in locals():
             raise Exception("There was an error with the query!")
 
         return df
