@@ -7,6 +7,9 @@ dagit:
 materialize:
 	dagster job execute --package-name dagster_jaffle_shop -j materialize_all_assets_job
 
+evaluate:
+	dagster job execute --package-name dagster_jaffle_shop -j evaluate_duckdb_tables_job
+
 format:
 	black dagster_jaffle_shop tests
 
