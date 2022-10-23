@@ -10,8 +10,9 @@ PRIMARY_KEY_DICT = {
     "customers": "customer_id",
     "stg_customers": "customer_id",
     "orders": "order_id",
-    "stg_orders": "order_id"
+    "stg_orders": "order_id",
 }
+
 
 @op(required_resource_keys={"duckdb"})
 def profile_duckdb_tables(context: OpExecutionContext) -> None:
@@ -50,7 +51,6 @@ def test_duckdb_table_primary_keys(context: OpExecutionContext) -> None:
     table_list = df["tablename"].values.tolist()
     context.log.info("Found %s tables in DuckDB database.", len(table_list))
 
-
     # for each table, read in the data and create profile
     for table_name, col_name in PRIMARY_KEY_DICT.items():
         context.log.info("Checking for primary key validity of table %s", table_name)
@@ -61,12 +61,12 @@ def test_duckdb_table_primary_keys(context: OpExecutionContext) -> None:
         """
         df = ddb.execute_query(test)
         success = df.iloc[0]["count_null"] == 0
-        
+
         # log event
         observation = AssetObservation(
             asset_key=table_name,
             description="TEST: Primary key is not null",
-            metadata={"success": success}
+            metadata={"success": success},
         )
         context.log_event(event=observation)
 
