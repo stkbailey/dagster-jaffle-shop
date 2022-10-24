@@ -29,6 +29,13 @@ class DuckDBResource:
         return df
 
 
+class DuckDBAssetMetadata:
+    "This metadata class provides a structured way to yield asset contents."
+
+    def __init__(self, table_name: str):
+        self.table_name = table_name
+
+
 @resource
 def duckdb_resource(context: InitResourceContext) -> duckdb.DuckDBPyConnection:
     "The DuckDB resource has helper functions to work with a local database."

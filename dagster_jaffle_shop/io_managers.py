@@ -3,7 +3,11 @@ import time
 
 from dagster import IOManager, io_manager, OutputContext, InputContext
 
-from dagster_jaffle_shop.resources import DUCKDB_FILE, DuckDBResource
+from dagster_jaffle_shop.resources import (
+    DUCKDB_FILE,
+    DuckDBResource,
+    DuckDBAssetMetadata,
+)
 from dagster_jaffle_shop.utils import render_jinja_template
 
 
@@ -47,7 +51,7 @@ class DuckDBIOManager(IOManager):
             }
         )
 
-    def load_input(self, context: InputContext) -> str:
+    def load_input(self, context: InputContext) -> DuckDBAssetMetadata:
         """
         The load_input function determines how this asset will be loaded by any
         assets that reference it. In our case, we are not loading a dataframe
@@ -55,8 +59,7 @@ class DuckDBIOManager(IOManager):
         in the SQL query.
         """
         # upstream_output.name is the name given to the Out that we're loading for
-        table_name = context.upstream_output.name
-        return table_name
+        return DuckDBAssetMetadata(table_name=context.upstream_output.name)
 
 
 @io_manager

@@ -1,7 +1,8 @@
-FROM python:3.10-slim-buster
+FROM python:3.9-slim-buster
 
 # Update system dependencies
-RUN apt-get update && apt-get install -y build-essential
+RUN apt-get update && \
+    apt-get install -y build-essential openssh-client git gcc
 
 # Add a dagster.yaml in the working directory
 RUN touch /tmp/dagster.yaml

@@ -1,10 +1,11 @@
 from dagster import asset
 
 from dagster_jaffle_shop.io_managers import duckdb_io_manager
+from dagster_jaffle_shop.resources import DuckDBAssetMetadata
 
 
 @asset(group_name="models", io_manager_def=duckdb_io_manager)
-def stg_payments(raw_payments: str) -> str:
+def stg_payments(raw_payments: DuckDBAssetMetadata) -> str:
     "An intermediate staging table for payments"
 
     jinja_query = """

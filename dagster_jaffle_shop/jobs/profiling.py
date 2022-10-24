@@ -64,7 +64,7 @@ def test_duckdb_table_primary_keys(context: OpExecutionContext) -> None:
             where {col_name} is null
         """
         df = ddb.execute_query(test)
-        success = df.iloc[0]["count_null"] == 0
+        success = bool(df.iloc[0]["count_null"] == 0)
 
         # log event
         observation = AssetObservation(

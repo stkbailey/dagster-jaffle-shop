@@ -27,7 +27,7 @@ test:
 	pytest tests
 
 docker-build:
-	docker build -t $(IMAGE_NAME) .
+	docker build --platform linux/amd64 -t $(IMAGE_NAME) .
 
 docker-dagit:
 	docker run $(IMAGE_NAME) dagit --package-name $(PACKAGE_NAME) -p 3000:3000 -h 0.0.0.0

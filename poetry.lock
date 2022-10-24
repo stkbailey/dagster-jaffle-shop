@@ -2026,7 +2026,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "ac65644cd801416830262bf069b3054708b4d792108f56d7a20a78265f9221f6"
+content-hash = "26947b48c78382cd14698ee1eef9646cca93537b6cd8cb055ae4805a3c0c675b"
 
 [metadata.files]
 alembic = [
