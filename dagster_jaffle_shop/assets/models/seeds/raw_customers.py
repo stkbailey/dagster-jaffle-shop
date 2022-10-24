@@ -1,7 +1,7 @@
 from dagster import asset, OpExecutionContext
 
 from dagster_jaffle_shop.assets.system.duckdb_db import duckdb_db
-from dagster_jaffle_shop.utils import get_seed_filepath
+from dagster_jaffle_shop.utils import get_package_root_path
 from dagster_jaffle_shop.io_managers import duckdb_io_manager
 
 
@@ -13,7 +13,7 @@ from dagster_jaffle_shop.io_managers import duckdb_io_manager
 def raw_customers() -> str:
     "Raw customer data loaded from a CSV."
 
-    f = get_seed_filepath("raw_customers.csv")
-    query = f"SELECT * FROM read_csv_auto('{f}')"
+    p = get_package_root_path() / "assets" / "include" / "raw_customers.csv"
+    query = f"SELECT * FROM read_csv_auto('{p.as_posix()}')"
 
     return query

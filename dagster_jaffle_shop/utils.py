@@ -4,6 +4,9 @@ import warnings
 
 from dagster import ExperimentalWarning
 
+# mute dagster warnings
+warnings.filterwarnings("ignore", category=ExperimentalWarning)
+
 
 def resolve_duckdb_ref(name):
     """
@@ -21,13 +24,6 @@ def render_jinja_template(q: str) -> str:
     return result
 
 
-def get_seed_filepath(name) -> str:
-    "Get the absolute path to a seed file"
-    root_dir = pathlib.Path(__file__).parent
-    f = root_dir / "include" / name
-    return f.absolute().as_posix()
-
-
-def mute_dagster_warnings() -> None:
-    "Filter extraneous warnings that Dagster emits. Must be invoked."
-    warnings.filterwarnings("ignore", category=ExperimentalWarning)
+def get_package_root_path() -> pathlib.Path:
+    "Get the path of the package"
+    return pathlib.Path(__file__).parent.absolute()
