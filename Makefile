@@ -8,13 +8,13 @@ IMAGE_NAME := dagster-jaffle-shop
 clean:
 	find $(PACKAGE_NAME) -type d -name '__pycache__' -exec rm -rf {} \;
 
-dagit:
+dagit: setup
 	dagit --package-name $(PACKAGE_NAME)
 
-materialize:
+materialize_job: setup
 	dagster job execute --package-name $(PACKAGE_NAME) -j materialize_all_assets_job
 
-evaluate:
+evaluate_job: setup
 	dagster job execute --package-name $(PACKAGE_NAME) -j evaluate_duckdb_tables_job
 
 format:

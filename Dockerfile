@@ -13,7 +13,7 @@ COPY pyproject.toml poetry.lock ./
 # Install dependencies via Poetry, for extra stability
 RUN pip install poetry==1.2.0
 RUN poetry config virtualenvs.create false \
-    && poetry install --no-dev
+    && poetry install
 
 # copy all other system files over (ignoring those in .dockerignore)
 COPY . .
