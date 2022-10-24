@@ -1,9 +1,13 @@
+"""
+Creates a job that is not directly associated with assets, which can
+be run to log metadata to those assets, based on their names.
+"""
 import json
 
-from dagster import op, job, OpExecutionContext, AssetObservation, ExpectationResult
+from dagster import op, job, OpExecutionContext, AssetObservation
 from pandas_profiling import ProfileReport
 
-from dagster_jaffle_shop.utils.resources import duckdb_resource
+from dagster_jaffle_shop.resources import duckdb_resource
 
 
 PRIMARY_KEY_DICT = {
@@ -43,7 +47,7 @@ def profile_duckdb_tables(context: OpExecutionContext) -> None:
 
 @op(required_resource_keys={"duckdb"})
 def test_duckdb_table_primary_keys(context: OpExecutionContext) -> None:
-    "This op tests that there are no null values in any column."
+    "Tests that there are no null values in a declared primary key col."
 
     # list all tables in the duckdb database
     ddb = context.resources.duckdb
@@ -60,7 +64,7 @@ def test_duckdb_table_primary_keys(context: OpExecutionContext) -> None:
             where {col_name} is null
         """
         df = ddb.execute_query(test)
-        success = df.iloc[0]["count_null"] == 0
+        success = bool(df.iloc[0]["count_null"] == 0)
 
         # log event
         observation = AssetObservation(

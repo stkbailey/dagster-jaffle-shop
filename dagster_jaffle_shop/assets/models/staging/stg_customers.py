@@ -1,10 +1,11 @@
-from dagster import asset, OpExecutionContext
+from dagster import asset
 
-from dagster_jaffle_shop.utils.io_managers import duckdb_io_manager
+from dagster_jaffle_shop.io_managers import duckdb_io_manager
+from dagster_jaffle_shop.resources import DuckDBAssetMetadata
 
 
 @asset(group_name="models", io_manager_def=duckdb_io_manager)
-def stg_customers(context: OpExecutionContext, raw_customers: str) -> str:
+def stg_customers(raw_customers: DuckDBAssetMetadata) -> str:
     "An intermediate staging table for customers"
 
     jinja_query = """

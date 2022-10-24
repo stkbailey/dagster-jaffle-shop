@@ -1,10 +1,11 @@
 from dagster import asset
 
-from dagster_jaffle_shop.utils.io_managers import duckdb_io_manager
+from dagster_jaffle_shop.io_managers import duckdb_io_manager
+from dagster_jaffle_shop.resources import DuckDBAssetMetadata
 
 
 @asset(group_name="models", io_manager_def=duckdb_io_manager)
-def orders(stg_orders: str, stg_payments: str) -> str:
+def orders(stg_orders: DuckDBAssetMetadata, stg_payments: DuckDBAssetMetadata) -> str:
     "This table has basic information about orders, as well as some derived facts based on payments"
 
     jinja_query = """
