@@ -31,7 +31,7 @@ class DuckDBResource:
 
 @resource
 def duckdb_resource(context: InitResourceContext) -> duckdb.DuckDBPyConnection:
-    "The DuckDB resource yields a read-only connection to a local database."
+    "The DuckDB resource has helper functions to work with a local database."
 
     db_file = pathlib.Path(DUCKDB_FILE)
     yield DuckDBResource(database=db_file.as_posix())

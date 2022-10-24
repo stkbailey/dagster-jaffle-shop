@@ -1,6 +1,6 @@
 from dagster import asset
 
-from dagster_jaffle_shop.utils.io_managers import duckdb_io_manager
+from dagster_jaffle_shop.io_managers import duckdb_io_manager
 
 
 @asset(group_name="models", io_manager_def=duckdb_io_manager)
